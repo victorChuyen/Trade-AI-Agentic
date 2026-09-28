@@ -37,7 +37,7 @@ cd "C:\OPC-AI-TRADER"
 
 # Clone repository or initialize
 if (-not (Test-Path "C:\OPC-AI-TRADER\.git")) {
-    git clone https://github.com/victorChuyen/opc-ai-trader.git C:\OPC-AI-TRADER
+    git clone https://github.com/victorChuyen/Trade-AI-Agentic.git C:\OPC-AI-TRADER
 }
 
 # Setup Python Virtual Environment
