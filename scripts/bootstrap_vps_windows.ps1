@@ -57,13 +57,23 @@ Log-Message ">>> MetaTrader 5 Terminal ready at C:\Program Files\MetaTrader 5\te
 # 5. Setup Project Repository
 Log-Message ">>> [4/7] Setting up repository at C:\OPC-AI-TRADER..."
 $repoDir = "C:\OPC-AI-TRADER"
-if (-not (Test-Path "$repoDir\.git")) {
-    git clone https://github.com/victorChuyen/Trade-AI-Agentic.git $repoDir
-} else {
-    Set-Location $repoDir
-    git config --global --add safe.directory $repoDir 2>$null
-    git pull origin main
+if (-not (Test-Path $repoDir)) {
+    New-Item -ItemType Directory -Force -Path $repoDir | Out-Null
 }
+Set-Location $repoDir
+git config --global --add safe.directory $repoDir 2>$null
+
+if (-not (Test-Path "$repoDir\.git")) {
+    git init
+    git remote add origin https://github.com/victorChuyen/Trade-AI-Agentic.git 2>$null
+    git fetch origin main
+    git reset --hard origin/main
+} else {
+    git remote set-url origin https://github.com/victorChuyen/Trade-AI-Agentic.git 2>$null
+    git fetch origin main
+    git reset --hard origin/main
+}
+
 
 Set-Location $repoDir
 
