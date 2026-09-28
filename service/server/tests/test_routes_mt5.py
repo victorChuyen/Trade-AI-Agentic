@@ -26,8 +26,8 @@ class RouteMT5Tests(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         data = res.json()
         self.assertEqual(data["platform"], "MetaTrader 5")
-        self.assertEqual(data["server"], "FTMO-Demo")
-        self.assertEqual(data["login"], 1514763831)
+        self.assertEqual(data["server"], self.gateway.server)
+        self.assertEqual(data["login"], self.gateway.login)
         self.assertIn("connected", data)
 
     def test_get_mt5_risk(self):
