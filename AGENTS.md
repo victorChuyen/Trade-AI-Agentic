@@ -99,11 +99,14 @@ D:/TRADE-AI/AI-Trader-main/
 | **1. Windows Fix** | Sửa lỗi `fcntl` chỉ chạy trên Unix, chuyển sang file lock đa nền tảng (`msvcrt`) | `service/server/worker.py` | ✅ Hoàn thành | Đã xác minh trên Windows |
 | **2. Python 3.11 Setup** | Tạo môi trường ảo CPython 3.11.15 sạch qua `uv`, cài đặt 85 packages | `.venv/` | ✅ Hoàn thành | Exit code 0 |
 | **3. Dependency Fix** | Cài đặt `email-validator` & `metatrader5` vào backend requirements | `service/requirements.txt` | ✅ Hoàn thành | Khắc phục lỗi Pydantic |
-| **4. MT5 FTMO Gateway** | Xây dựng Gateway MT5 kết nối tài khoản FTMO Demo `1514763831` | `service/server/mt5_gateway.py` | ✅ Hoàn thành | 6/6 tests pass |
+| **4. MT5 FTMO Gateway** | Xây dựng Gateway MT5 kết nối tài khoản Live Demo `5056580335` | `service/server/mt5_gateway.py` | ✅ Hoàn thành | 6/6 tests pass |
 | **5. FTMO Drawdown Guard** | Giám sát trần Daily Loss (4.5%/5.0%) & Max Drawdown (9.0%/10.0%) | `service/server/mt5_gateway.py` | ✅ Hoàn thành | 6/6 tests pass |
 | **6. REST API MT5** | Xây dựng 9 endpoint `/v1/mt5/*` (status, connect, account, positions, quote, order, risk) | `service/server/routes_mt5.py` | ✅ Hoàn thành | 3/3 tests pass |
 | **7. Mở rộng Thị trường** | Thêm `forex` và `commodities` (XAUUSD, WTI) vào hệ thống | `service/server/routes_shared.py` | ✅ Hoàn thành | 7/7 tests pass |
-| **8. MT5 Desktop Client** | Cài đặt MetaTrader 5 Terminal trên máy trạm để kích hoạt IPC | `terminal64.exe` | ⏳ Chờ chạy setup | Đã sẵn sàng đường link |
+| **8. Firebase Auth & RBAC** | Google Sign-In, Super Admin RBAC (`coach.chuyen@gmail.com`), Token auth | `firebase_auth.py`, `firebase.ts` | ✅ Hoàn thành | Đã kiểm thử 100% |
+| **9. Windows VPS 24/7** | Windows Server 2022 trên Google Cloud (`opc-trade-win-01`, IP: `34.87.156.228`) | `asia-southeast1-b` | ✅ Hoàn thành | Port 3389, 8000 mở |
+| **10. Caddy Reverse Proxy** | Trỏ `trade.breaths.live` qua internal IP `10.148.0.3:8000` | `/opt/woa/Caddyfile` | ✅ Hoàn thành | Caddy reloaded |
+| **11. GitHub Auto-Deploy** | CI/CD GitHub Actions + Auto-Deploy Watcher (pull & redeploy trong 60s) | `.github/workflows/deploy.yml` | ✅ Hoàn thành | 132/132 tests pass |
 
 ---
 
@@ -121,10 +124,10 @@ cd D:\TRADE-AI\AI-Trader-main
 & ".\.venv\Scripts\python.exe" service\server\worker.py
 ```
 
-### 3. Chạy kiểm thử tự động MT5 Gateway:
+### 3. Chạy kiểm thử tự động toàn bộ 132 Test Suites:
 ```powershell
 cd D:\TRADE-AI\AI-Trader-main
-& ".\.venv\Scripts\pytest.exe" service\server\tests\test_mt5_gateway.py service\server\tests\test_routes_mt5.py
+& ".\.venv\Scripts\pytest.exe" service\server\tests\
 ```
 
 ### 4. Kiểm tra trạng thái kết nối MT5 thực tế:
@@ -133,11 +136,37 @@ cd D:\TRADE-AI\AI-Trader-main\service\server
 & "..\..\.venv\Scripts\python.exe" -c "from mt5_gateway import get_mt5_gateway; gw = get_mt5_gateway(); print(gw.connect())"
 ```
 
+### 5. Cập nhật và triển khai tự động qua GitHub:
+```powershell
+cd C:\OPC-AI-TRADER
+& powershell -ExecutionPolicy Bypass -File ".\scripts\update_and_deploy.ps1"
+```
+
 ---
 
-## 📌 QUY TRÌNH KÍCH HOẠT KẾT NỐI FTMO DEMO THỰC TẾ
+## 📌 THÔNG TIN HẠ TẦNG & GIAO DỊCH TRỰC TIẾP
 
-Để hoàn tất kết nối sống 100% giữa code Python và tài khoản FTMO:
-1. Tải và cài đặt phần mềm **MetaTrader 5 Terminal** từ trang FTMO (hoặc link chính thức của MQL5).
-2. Mở phần mềm MT5 lên, chọn Server `FTMO-Demo`, đăng nhập tài khoản `1514763831` với mật khẩu `36Ia$7Rh!`.
-3. Khi phần mềm MT5 đang chạy, backend Python sẽ tự động kết nối qua kênh IPC trong vòng **0.5 giây**, đọc toàn bộ Balance, Equity và sẵn sàng nhận lệnh từ Dashboard.
+### 1. Tài khoản Giao dịch MetaTrader 5 Đang Kết Nối:
+- **Broker / Server:** `MetaQuotes-Demo`
+- **Login Account:** `5056580335`
+- **Master Password:** `_iDgN8Bs`
+- **Investor Password:** `_p0pRsTo`
+- **Balance:** `$10,000.00 USD` (Đang có lệnh chạy AUDCAD thực tế)
+- **FTMO Risk Guard:** Daily Loss: `0.04% / 5.0%` (SAFE), Max Drawdown: `0.05% / 10.0%` (SAFE).
+
+### 2. Thông số Máy chủ VPS Google Cloud:
+- **Instance:** `opc-trade-win-01` (Windows Server 2022 Datacenter, `asia-southeast1-b`)
+- **Public IP:** `34.87.156.228`
+- **Internal IP:** `10.148.0.3` (Kết nối nội bộ với VPS Linux `10.148.0.2`)
+- **RDP Credentials:** User: `luckyadmin` | Password: `>Z3?TR%GPb{.9]B`
+- **Reverse Proxy:** `trade.breaths.live` -> `10.148.0.3:8000` (Caddy HTTPS)
+
+### 3. Cơ chế Tự Động Triển Khai GitHub (GitOps Auto-Deploy):
+- **Repository:** `https://github.com/victorChuyen/Trade-AI-Agentic` (Branch: `main`)
+- **Watcher Service:** Task Scheduler `OPC-AI-Trader-AutoDeploy` chạy ngầm `scripts\auto_deploy_watcher.ps1` kiểm tra `git fetch origin main` mỗi 60 giây.
+- **Quy trình Auto-Deploy:**
+  1. Khi Chairman Victor hoặc team đẩy code mới lên GitHub (`git push origin main`),
+  2. GitHub Actions kiểm thử tự động 132 test suites và build frontend.
+  3. VPS `opc-trade-win-01` phát hiện commit mới trong 60 giây.
+  4. Tự động kéo mã nguồn (`git pull`), cập nhật thư viện Python (`pip install`), biên dịch frontend (`npm run build`), và khởi động lại Backend Engine mà không cần bất kỳ thao tác thủ công nào.
+

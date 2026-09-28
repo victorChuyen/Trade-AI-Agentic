@@ -1,0 +1,53 @@
+name: OPC AI Trader CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  test_and_build:
+    name: Test & Build Production Bundle
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r service/requirements.txt
+          pip install pytest httpx
+
+      - name: Run Python Automated Tests (Excluding Windows-only MT5 IPC)
+        run: |
+          pytest service/server/tests/ -k "not mt5"
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+          cache-dependency-path: service/frontend/package-lock.json
+
+      - name: Build Frontend Production Artifacts
+        working-directory: service/frontend
+        run: |
+          npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+          npm run build
+
+      - name: Auto-Deployment Notification
+        run: |
+          echo "=========================================================="
+          echo "  ✅ CI/CD Validation Passed!"
+          echo "  VPS Auto-Deploy Watcher on opc-trade-win-01 will auto-pull"
+          echo "  and redeploy commit ${{ github.sha }} within 60 seconds."
+          echo "=========================================================="
