@@ -35,5 +35,6 @@ Write-Host "  ✅ Đã đăng ký task: OPC-AI-Trader-AutoDeploy" -ForegroundCol
 Start-ScheduledTask -TaskName "OPC-AI-Trader-Engine" -ErrorAction SilentlyContinue
 Start-ScheduledTask -TaskName "OPC-AI-Trader-AutoDeploy" -ErrorAction SilentlyContinue
 
-Write-Host "`n🎉 HỆ THỐNG AUTO-DEPLOYMENT ĐÃ ĐƯỢC KÍCH HOẠT THÀNH CÔNG!" -ForegroundColor Green
-Write-Host "Mọi thay đổi trên GitHub repo https://github.com/victorChuyen/Trade-AI-Agentic sẽ tự động kéo và triển khai trên VPS." -ForegroundColor Green
+Write-Host ">>> [SUCCESS] AUTO-DEPLOYMENT SERVICE INSTALLED SUCCESSFULLY!" -ForegroundColor Green
+Write-Host ">>> Any new commit on GitHub https://github.com/victorChuyen/Trade-AI-Agentic will auto-deploy within 60s." -ForegroundColor Green
+

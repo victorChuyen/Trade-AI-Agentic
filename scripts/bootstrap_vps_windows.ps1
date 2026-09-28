@@ -170,6 +170,7 @@ Log-Message ">>> [7/7] Registering Auto-Deploy Service & Launching Trading Engin
 & powershell -ExecutionPolicy Bypass -File ".\scripts\install_auto_deploy_service.ps1"
 
 Log-Message "==========================================================" "Green"
-Log-Message "  🎉 PROVISIONING SUCCESSFUL! SYSTEM IS LIVE ON PORT 8000 " "Green"
+Log-Message "  [SUCCESS] PROVISIONING SUCCESSFUL! SYSTEM IS LIVE ON PORT 8000 " "Green"
+
 Log-Message "  Dashboard & API: http://localhost:8000" "Green"
 Log-Message "==========================================================" "Green"
